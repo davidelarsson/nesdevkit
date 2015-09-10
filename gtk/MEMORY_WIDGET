@@ -1,0 +1,114 @@
+MEMORY WIDGET
+=============
+
+This document describes the inner working of the `memory_widget` widget.
+
+
+TODO
+----
+
+The PC should be marked in memory. So should the next instruction if it is about to do a memory operation.
+
+Why
+---
+I wanted to learn. And also, I want to use the same widget for both general memory debugging and the stack
+window in my NES emulator, hence the customization ability when creating the widget.
+
+Thoughts
+--------
+At initialization...
+
+stuct {
+	size_t		size;
+	char		*mem_start;
+	const char	*descr;
+	(* byte)	reader(word address);
+	(* void)	writer(word address, byte val);
+};
+
+Properties:
+
+* ram_read_callback
+* ram_write_callback
+* rom_read_allback
+* rom_write_callback
+* read_pc_callback
+
+
+
+Widget graphical layout
+=======================
+
+The widget comprises two tables. One (front_table) on top of another (table).
+
+front_table contains 
+
+table: 
+------
+
++----------------+------------------------+  -+-
+| Offset 0x8000  | Bookmark: XXXXXXXXX    |   |
++-------+--------+------------------------+   |
+| Label |                                 |   |
++-------+                                 |   |
+| 8000  |                                 |   | vbox
+| 8001  |           front_table           |   |
+|       |                                 |   |
+| ...   |                                 |   |
+|       |                                 |   |
+| 800F  |                                 |   |
++-------+---------------------------------+  -+-
+
+|                                         |
++-----------------------------------------+
+|               hbox                      |
+
+front_table:
+------------
+
+0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+00  00  00  00  00  00  00  00  00  00  00  00  00  00  00  00
+
+
+
+
+Definitions
+-----------
+
+* Label: The label on the top-left corner of the table, in this case the one
+  that contains the text "Location".
+
+* Horizontal location: the (mandatory) top row that in the example above
+  contains the digits "0" to "F".
+
+* Vertical location: the (mandatory) left column that 
+
+* Value
+Blablabla...
+
+
+
+It has two to seventeen colums. One mandatory Location column and at least
+one memory column.  At least two rows. One Location row and at least one memory value.
+
+All memory values in the table are editable. No other locations are. In order to change the currently active
+location, a signal must be emitted on the object.
+
+
+
+

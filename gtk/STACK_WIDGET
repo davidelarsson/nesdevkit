@@ -1,0 +1,17 @@
+STACK WIDGET
+============
+
+Properties:
+
+* ram
+* ram_read_callback
+* read_sp_callback
+
+Questions:
+
+Do you need the ability to edit memory in this widget? Nah... Unless I find out a more beautiful way of doing so in the memory widget and copy this process to the stack widget.
+
+Public functions:
+
+* stack_widget_update_gui(stack_widget_t *sw);
+

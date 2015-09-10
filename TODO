@@ -1,0 +1,155 @@
+TODO
+====
+
+HEY! REMEMBER to remove qt/Makefile before checking out, ie, run make distclean!
+
+General
+=======
+
+* Fix the damn assembler!
+* The real CPU does a memory read even for instructions that don't use operands. There might be software, or more likely, mappers that are dependent on this behavior.
+* Undocumented opcodes?
+
+
+GTK GUI
+=======
+
+Things to do
+------------
+
+* The instruction pointer of the memory widget is fake and is not working.
+* Add PPU widget
+* Rewrite the GUI
+* If a ROM is specified on the command line and can not be parsed, should the program still start in suggest_load mode?
+
+
+Comments
+--------
+
+The cycle counter in the GTK widget is a gulong, which is usually 32 bits, while in core it is a long long, which is at least 64 bits long.
+
+All custom widgets ought to have an ENABLE property that ExecuteWidget can control.
+
+
+
+CORE
+====
+
+Needs to be reorganized, but not rewritten.
+
+Prio
+----
+
+* A 16 kB ROM must be duplicated!
+* Joystick I/O
+* Make sure that high mapper numbers are parsed correctly
+* Test disassembly of all instructions together with the assembler
+* Test CPU accuracy. Easily done with test ROM
+* Finalize debug API
+
+
+Later
+-----
+
+* Understand the overflow flag
+* Maybe add offset argument to nes_disasm()? Depends on what I feel like when it is tested in the GUI
+* Put the CPU arrays into the nes_t struct
+* Change names of functions
+* parse_addressing_mode() does not check that it doesn't look beyond the length of the input string!!!
+* Add decimal constants in the assembler
+* Unify (xx,x) and (xx),y terminology
+
+
+More platforms
+==============
+
+Two kinds of platforms. One complete that uses the debug API, and one only for gaming.
+
+Ports:
+------
+
+* GTK+
+* Qt
+* Windows API
+* Android
+* iOS
+* Emscripten / asm.js
+* IUP?
+
+
+
+Documentation
+=============
+
+PC altering instructions handle the PC on their own. For all other instructions execute() increases the PC according to cpu_instruction_length[] array. The PC altering instructions are: the branch instructions (BxS and BxC), BRK, JSR, JMP, RTS, and RTI.
+
+API
+===
+There are two categories of API functions. One very limited group of functions, yet complete for its purpose, is designed for platforms that are only interested in gameplay. It comprises merely five function calls.
+
+The other group is suited for platforms that wish to implement a complete debugging and development environment. It has a lot more functions.
+
+
+
+Play API
+--------
+nes_t *nes_init(char *rom);									// Instantiate a NES
+void nes_destroy(nes_t *nes);								// Clean up a NES
+void nes_step(nes_t *nes);									// Step the emulation
+nes_frame_t *nes_get_frame(nes_t *nes);						// Get a graphics frame
+void nes_set_joypad(nes_t *nes, JOYPAD1|JOYPAD2, nes_buttons_t b);	// Set joypad buttons
+
+
+Debug API:
+----------
+cpu_t *nes_debug_get_cpu(nes_t *nes);						// Get the CPU struct
+cpu_mem *nes_debug_get_cpu_mem(nes_t *nes);					// Get the CPU memory struct
+void nes_debug_cpu_set_a(cpu_t *cpu, byte val);				// Set the A register of a CPU
+void nes_debug_write_cpu_mem(cpu_mem *mem, word address, byte val) // Write value to CPU memory
+et.c.
+
+In order for a debugger to read and write bytes in ROM after a game has been loaded, use:
+
+* nes_prg_rom_read();
+* nes_prg_rom_write();
+
+
+
+Extra cycle on page boundaries
+------------------------------
+ADC abs,x
+ADC abs,y
+ADC (indirect),y
+AND abs,x
+AND abs,y
+AND (indirect),y
+CMP abs,x
+CMP abs,y
+CMP (indirect),y
+EOR abs,x
+EOR abs,y
+EOR (indirect),y
+LDA abs,x
+LDA abs,y
+LDA (indirect),y
+LDX abs,y
+LDY abs,x
+ORA abs,x
+ORA abs,y
+ORA (indirect),y
+SBC abs,x
+SBC abs,y
+SBC (indirect),y
+
+No extra cycle on page boundaries
+---------------------------------
+ASL abs,x
+DEC abs,x
+INC abs,x
+LSR abs,x
+ROR abs,x
+ROL abs,x
+STA abs,x
+STA abs,y
+STA (indirect),y
+

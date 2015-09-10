@@ -1,0 +1,17 @@
+Callbacks needed:
+
+* read_rom
+* read_ram
+* read_pc
+
+Properties
+
+* read_ram_callback
+* read_rom_callback
+* address
+* auto_read_pc (boolean)
+
+If auto_read_pc is TRUE, the widget will automatically read the PC using its callback and update the address accordingly.
+If auto_read_pc is FALSE, the widget will not alter the address when updated, but only re-read memory bytes.
+
+

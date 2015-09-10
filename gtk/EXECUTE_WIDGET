@@ -1,0 +1,17 @@
+EXECUTE WIDGET
+==============
+
+This document describes the inner working of the `execute_widget` widget.
+
+Properties:
+
+* nes
+
+* execute_callback(nes);
+* step_callback(nes);
+
+Signals:
+
+* debugger_disable(bool);
+* debugger_update();
+

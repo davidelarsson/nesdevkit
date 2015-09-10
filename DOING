@@ -1,0 +1,36 @@
+main()
+Check whether we have a NES file as a command option.
+
+Do we? -> Load GUI, but don't suggest loading a game. Just load it!
+
+We don't. -> Load GUI and suggest loading a game.
+
+
+Keeping track of things
+-----------------------
+Alright. How to send main window around?
+
+Startup code
+------------
+main()
+-> application_start_open()
+-> application_start_suggest_open()
+
+application_start_suggest_open()
+  Creates main window and adds suggestion text that the user loads a file.
+-> file_selected()
+-> load_file()
+
+application_start_open()
+  Creates main window.
+-> EMULATION START!
+
+Signal ends
+-----------
+load_file()
+-> file_selected()
+
+file_selected()
+-> EMULATION (RE)START!
+
+
